@@ -38,8 +38,8 @@ public func configure(_ app: Application) throws {
         ), as: .psql)
     }
 
-    app.migrations.add(CreateUser())
     app.migrations.add(CreateQuote())
+    app.migrations.add(CreateUser())
     app.migrations.add(CreateTag())
     app.migrations.add(CreateQuoteTagPivot())
 
