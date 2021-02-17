@@ -9,8 +9,7 @@ import Fluent
 
 struct CreateTag: Migration {
     func prepare(on database: Database) -> EventLoopFuture<Void> {
-        database
-            .schema("tags")
+        database.schema("tags")
             .id()
             .field("name", .string, .required)
             .create()

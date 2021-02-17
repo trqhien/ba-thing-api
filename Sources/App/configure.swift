@@ -4,12 +4,16 @@ import Vapor
 
 // configures your application
 public func configure(_ app: Application) throws {
-    if let url = Environment.get("DATABASE_URL") {
-        app.databases.use( try .postgres(url: url + "?sslmode=require"), as: .psql)
-//    if let databaseURL = Environment.get("DATABASE_URL"), var postgresConfig = PostgresConfiguration(url: databaseURL) {
-//        postgresConfig.tlsConfiguration = .forClient(certificateVerification: .none)
-//        app.databases.use(.postgres(configuration: postgresConfig), as: .psql)
+//    if let url = Environment.get("DATABASE_URL") {
+//        app.databases.use( try .postgres(url: url + "?sslmode=require"), as: .psql)
+    if let url = Environment.get("DATABASE_URL"), var postgresConfig = PostgresConfiguration(url: url) {
+        postgresConfig.tlsConfiguration = .forClient(certificateVerification: .none)
+        postgresConfig.username = "gvzlfahvkdufqr"
+        postgresConfig.password = "0f1e2af594477a7a7b095dab3e2d926c92ab9223ba781858bdedb1d36fc77aec"
+        app.databases.use(.postgres(configuration: postgresConfig), as: .psql)
+        print("🌮 database URL \(url)")
     } else {
+        print("🌮 database URL \(Environment.get("DATABASE_HOST") ?? "localhost??")")
         let databaseName: String
         let databasePort: Int
 
@@ -33,9 +37,6 @@ public func configure(_ app: Application) throws {
             database: databaseName
         ), as: .psql)
     }
-
-
-
 
     app.migrations.add(CreateUser())
     app.migrations.add(CreateQuote())
