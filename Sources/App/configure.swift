@@ -4,8 +4,11 @@ import Vapor
 
 // configures your application
 public func configure(_ app: Application) throws {
-    if let url = Environment.get("DATABASE_URL") {
-        app.databases.use( try .postgres(url: url), as: .psql)
+//    if let url = Environment.get("DATABASE_URL") {
+//        app.databases.use( try .postgres(url: url), as: .psql)
+    if let databaseURL = Environment.get("DATABASE_URL"), var postgresConfig = PostgresConfiguration(url: databaseURL) {
+        postgresConfig.tlsConfiguration = .forClient(certificateVerification: .none)
+        app.databases.use(.postgres(configuration: postgresConfig), as: .psql)
     } else {
         let databaseName: String
         let databasePort: Int
