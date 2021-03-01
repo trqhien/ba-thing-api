@@ -78,8 +78,14 @@ struct QuotesController: RouteCollection {
         return Quote
             .query(on: req.db)
             .group(.or) { or in
-                or.filter(\.$short == searchTerm)
-                or.filter(\.$long == searchTerm)
+                or.filter(\.$short, .contains(inverse: false, .anywhere), searchTerm)
+                or.filter(\.$short, .contains(inverse: false, .anywhere), searchTerm.lowercased())
+                or.filter(\.$short, .contains(inverse: false, .anywhere), searchTerm.uppercased())
+                or.filter(\.$short, .contains(inverse: false, .anywhere), searchTerm.capitalized)
+                or.filter(\.$long, .contains(inverse: false, .anywhere), searchTerm)
+                or.filter(\.$long, .contains(inverse: false, .anywhere), searchTerm.lowercased())
+                or.filter(\.$long, .contains(inverse: false, .anywhere), searchTerm.uppercased())
+                or.filter(\.$long, .contains(inverse: false, .anywhere), searchTerm.capitalized)
             }
             .all()
     }
